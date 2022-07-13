@@ -10,10 +10,27 @@
 {% endblock %}
 
 {% block content %}
-    <h1> Posts </h1>
-    {% for name in names %}
-        <p>
-            {{ name }}
-        </p>
+<h1>Posts: </h1>
+    {% for post in posts %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.body }}</p>
+                    <a href="{% url 'current_post_url' slug=post.slug %}" class="btn btn-primary">Read</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.body }}</p>
+                    <a href="{% url 'current_post_url' slug=post.slug%}" class="btn btn-primary">Read</a>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
 {% endblock %}
