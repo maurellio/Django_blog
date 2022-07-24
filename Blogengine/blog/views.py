@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.http import HttpResponse
 from django.views.generic import View
 from django.shortcuts import get_object_or_404
 
 from .models import Post, Tag
-from .utils import ObjectDetailMixin
+from .utils import *
 from .froms import TagForm, PostForm
 
 def posts_list(request):
@@ -16,34 +17,37 @@ class PostDetail(ObjectDetailMixin, View):
     model = Post
     template = 'blog/current_post.html'
 
-class PostCreate(View):
-    def get(self, request):
-        form = PostForm()
-        return render(request, 'blog/post_create_form.html', context={'form' : form})
+class PostCreate(ObjectCreateMixin, View):
+    model_form = PostForm
+    template = 'blog/post_create_form.html'
 
-    def post(self, request):
-        bound_form = PostForm(request)
-        if bound_form.is_valid():
-            new_post = bound_form.save()
-            return redirect(new_post)
-        return render(request, 'blog/post_create_form.html', context={'form' : bound_form})
+class PostUpdate(ObjectUpdateMixin, View):
+    model = Post
+    model_form = PostForm
+    template = 'blog/post_update_form.html'
+
+class PostDelete(ObjectDeleteMixin, View):
+    model = Post
+    template = 'blog/post_delete_form.html'
+    redirect_url = 'posts_list_url'
 
 class TagDetail(ObjectDetailMixin, View):
     model = Tag
     template = 'blog/tag_detail.html'
 
-class TagCreate(View):
-    def get(self, request):
-        form = TagForm()
-        return render(request, 'blog/tag_create.html', context={'form' : form})
+class TagCreate(ObjectCreateMixin, View):
+    model_form = TagForm
+    template = 'blog/tag_create.html'
 
-    def post(self, request):
-        bound_form = TagForm(request.POST)
-        if bound_form.is_valid():
-            new_tag = bound_form.save()
-            return redirect(new_tag)
-        return render(request, 'blog/tag_create.html', context={'form' : bound_form})
+class TagUpdate(ObjectUpdateMixin, View):
+    model = Tag
+    model_form = TagForm
+    template = 'blog/tag_update_form.html'
 
+class TagDelete(ObjectDeleteMixin, View):
+    model = Tag
+    template = 'blog/tag_delete_form.html'
+    redirect_url = 'tag_list_url'
 
 def tag_list(request):
     tags = Tag.objects.all()
