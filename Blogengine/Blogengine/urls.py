@@ -18,8 +18,10 @@ from django.urls import path
 
 #from .views import hello
 from django.urls import include
+from .views import redirect_block
 
 urlpatterns = [
+    path('', redirect_block),
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls'))
 ]
